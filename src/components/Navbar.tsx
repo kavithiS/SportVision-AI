@@ -45,9 +45,10 @@ function AuthDropdown({ session }: { session: any }) {
     <div className="relative">
       <button
         onClick={() => setOpen((s) => !s)}
-        className="flex items-center gap-3 pl-2 pr-2 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all"
+        className="relative w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12] flex items-center justify-center transition"
         aria-haspopup="menu"
         aria-expanded={open}
+        aria-label="Open profile menu"
       >
         {session.user?.image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -63,11 +64,12 @@ function AuthDropdown({ session }: { session: any }) {
           </div>
         )}
 
-        {/* intentionally hide name and email to preserve privacy */}
-
-        <svg className={`w-4 h-4 text-slate-300 ml-1 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" stroke="currentColor">
-          <path d="M6 8l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        {/* chevron badge */}
+        <span className={`absolute -bottom-1 right-0 flex items-center justify-center w-5 h-5 rounded-full bg-slate-900 border border-white/[0.04] text-slate-300 text-[10px] ${open ? 'rotate-180' : ''}`}>
+          <svg className="w-3 h-3" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+            <path d="M6 8l4 4 4-4" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
       </button>
 
       {open && (
