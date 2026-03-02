@@ -81,37 +81,7 @@ function AuthDropdown({ session }: { session: any }) {
   );
 }
 
-    function QuickActions() {
-      const [open, setOpen] = useState(false);
-
-      return (
-        <div className="relative">
-          <button
-            onClick={() => setOpen((s) => !s)}
-            aria-label="Quick actions"
-            className="p-2 rounded-md bg-white/[0.02] hover:bg-white/[0.04] transition"
-          >
-            <svg className="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14" />
-              <path d="M5 12h14" />
-            </svg>
-          </button>
-
-          {open && (
-            <div className="absolute right-0 mt-2 w-44 rounded-xl bg-slate-950 border border-white/[0.04] shadow-lg py-2 z-40">
-              <Link href="/upload" className="flex items-center gap-3 px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">
-                <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg>
-                Upload
-              </Link>
-              <Link href="/dashboard/history" className="flex items-center gap-3 px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">
-                <svg className="w-4 h-4 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="M8 7h8"/><path d="M8 12h8"/></svg>
-                History
-              </Link>
-            </div>
-          )}
-        </div>
-      );
-    }
+    
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -167,12 +137,7 @@ export default function Navbar() {
           {status === "loading" ? (
             <div className="w-8 h-8 rounded-full bg-slate-800/80 animate-pulse" />
           ) : session ? (
-            <>
-              <div className="hidden md:block">
-                <QuickActions />
-              </div>
-              <AuthDropdown session={session} />
-            </>
+                    <AuthDropdown session={session} />
           ) : (
             <div className="flex items-center gap-2">
               <Link
