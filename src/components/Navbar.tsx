@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -13,6 +13,12 @@ const NAV_LINKS = [
 
 function AuthDropdown({ session }: { session: any }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // close dropdown when navigation occurs
+    if (open) setOpen(false);
+  }, [pathname]);
 
   function maskEmail(email?: string) {
     if (!email) return '';
@@ -69,12 +75,15 @@ function AuthDropdown({ session }: { session: any }) {
               <div className="px-4 py-3 border-b border-white/[0.03] flex items-center justify-center">
                 <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 font-semibold">{initials(session.user?.name, session.user?.email)}</div>
               </div>
-              <button
-                onClick={() => signOut({ callbackUrl: '/' })}
-                className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]"
-              >
-                Sign out
-              </button>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      signOut({ callbackUrl: '/' });
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]"
+                  >
+                    Sign out
+                  </button>
             </div>
       )}
     </div>
