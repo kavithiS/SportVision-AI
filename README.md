@@ -237,7 +237,7 @@ This project is for educational and demonstration purposes.
 
 Click the thumbnail below to open the full demo video (MP4). Place a thumbnail image at `.github/demo-thumb.png` in the repository so it displays here as a preview.
 
-[![Demo preview](.github/demo-thumb.png)](https://raw.githubusercontent.com/kavithiS/SportVision-AI/main/Demo%20video/Demo%20SportVision%20AI.mp4)
+[![Demo preview](.github/demo-thumb.svg)](https://raw.githubusercontent.com/kavithiS/SportVision-AI/main/Demo%20video/Demo%20SportVision%20AI.mp4)
 
 If you prefer the video hosted externally, replace the link above with your YouTube or Vimeo URL.
 - Remove any accidental secrets from local `.env` files and add a commit note you can use when pushing.
