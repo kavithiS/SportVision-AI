@@ -239,8 +239,11 @@ Click the thumbnail below to open the full demo video (MP4). Place a thumbnail i
 
 [![Demo preview](.github/demo-thumb.svg)](https://raw.githubusercontent.com/kavithiS/SportVision-AI/main/Demo%20video/Demo%20SportVision%20AI.mp4)
 
-If you prefer the video hosted externally, replace the link above with your YouTube or Vimeo URL.
-- Remove any accidental secrets from local `.env` files and add a commit note you can use when pushing.
-- Add minimal tests for `/api/upload` and `/api/analyze` endpoints.
+If you prefer the video hosted externally, replace the link above with a YouTube or Vimeo URL.
 
-Tell me which of those you'd like next and I'll proceed.
+Next steps (recommended):
+
+- Remove any accidental secrets from local `.env` files and rotate credentials if necessary.
+- Add simple tests for the `/api/upload` and `/api/analyze` endpoints to validate core flows.
+
+If you’d like, I can implement any of the recommendations above — tell me which one to start with.
