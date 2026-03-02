@@ -14,38 +14,71 @@ const NAV_LINKS = [
 function AuthDropdown({ session }: { session: any }) {
   const [open, setOpen] = useState(false);
 
+  function maskEmail(email?: string) {
+    if (!email) return '';
+    const [local, domain] = email.split('@');
+    if (!domain) return email;
+    const visible = local.length <= 2 ? local[0] : local.slice(0, 2);
+    return `${visible}…@${domain}`;
+  }
+
+  function initials(name?: string, email?: string) {
+    if (name) {
+      const parts = name.split(' ').filter(Boolean);
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    if (email) return (email[0] || 'U').toUpperCase();
+    return 'U';
+  }
+
+  const displayName = session.user?.name || session.user?.email?.split('@')[0];
+  const masked = maskEmail(session.user?.email);
+
   return (
     <div className="relative">
       <button
         onClick={() => setOpen((s) => !s)}
-        className="flex items-center gap-2 pl-2 pr-2 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all"
+        className="flex items-center gap-3 pl-2 pr-2 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all"
         aria-haspopup="menu"
         aria-expanded={open}
+        title={session.user?.email}
       >
         {session.user?.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={session.user.image}
             alt={session.user.name ?? 'avatar'}
-            className="w-8 h-8 rounded-full object-cover"
+            className="w-9 h-9 rounded-full object-cover"
             onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-sm font-bold">
-            {session.user?.email?.[0]?.toUpperCase() ?? 'U'}
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500/30 to-emerald-400/10 border border-emerald-500/20 flex items-center justify-center text-emerald-300 text-sm font-semibold">
+            {initials(session.user?.name, session.user?.email)}
           </div>
         )}
-        <div className="hidden lg:flex flex-col items-start">
-          <span className="text-sm text-white font-medium leading-tight">{session.user?.name ?? session.user?.email}</span>
-          <span className="text-xs text-slate-400 truncate">{session.user?.email}</span>
+
+        <div className="hidden md:flex flex-col items-start leading-tight">
+          <span className="text-sm text-white font-medium truncate max-w-[120px]">{displayName}</span>
+          <span className="text-xs text-slate-400">{masked}</span>
         </div>
+
         <svg className={`w-4 h-4 text-slate-300 ml-1 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" stroke="currentColor">
           <path d="M6 8l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 rounded-xl bg-slate-950 border border-white/[0.04] shadow-lg py-2 z-40">
+        <div className="absolute right-0 mt-2 w-56 rounded-xl bg-slate-950 border border-white/[0.04] shadow-lg py-2 z-40">
+          <div className="px-4 py-3 border-b border-white/[0.03]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 font-semibold">{initials(session.user?.name, session.user?.email)}</div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm text-white truncate">{displayName}</div>
+                <div className="text-xs text-slate-400 truncate">{masked}</div>
+              </div>
+            </div>
+          </div>
           <Link href="/dashboard/history" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">Dashboard</Link>
           <Link href="/upload" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">New Upload</Link>
           <button
