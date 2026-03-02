@@ -1,0 +1,166 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/upload", label: "Upload" },
+  { href: "/dashboard/history", label: "History" },
+];
+
+export default function Navbar() {
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <nav className="sticky top-0 z-50 bg-slate-950/70 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 h-16 flex items-center justify-between">
+
+        {/* Brand */}
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 font-bold text-lg tracking-tight select-none group"
+        >
+          <svg className="w-5 h-5 text-emerald-400 group-hover:text-emerald-300 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+          </svg>
+          <span className="text-emerald-400 group-hover:text-emerald-300 transition-colors">SportVision</span>
+          <span className="text-white">AI</span>
+        </Link>
+
+        {/* Desktop nav */}
+        <div className="hidden sm:flex items-center gap-1">
+          {NAV_LINKS.map(({ href, label }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={`relative px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                  active
+                    ? "text-white"
+                    : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.05]"
+                }`}
+              >
+                {label}
+                {active && (
+                  <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-emerald-400" />
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Auth section */}
+        <div className="hidden sm:flex items-center gap-3">
+          {status === "loading" ? (
+            <div className="w-8 h-8 rounded-full bg-slate-800/80 animate-pulse" />
+          ) : session ? (
+            <div className="flex items-center gap-2 pl-1 pr-1 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all">
+              {session.user?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={session.user.image}
+                  alt={session.user.name ?? "avatar"}
+                  title={session.user.email ?? ""}
+                  className="w-7 h-7 rounded-lg flex-shrink-0"
+                />
+              ) : (
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">
+                  {session.user?.email?.[0]?.toUpperCase() ?? "U"}
+                </div>
+              )}
+              <span className="text-xs text-slate-400 max-w-[130px] truncate pr-1 hidden lg:block">
+                {session.user?.email}
+              </span>
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="text-xs px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] text-slate-300 hover:text-white border border-white/[0.06] hover:border-white/[0.12] transition-all font-medium"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                href="/login"
+                className="text-sm px-4 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] font-medium transition-all"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                className="text-sm px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-400/20 hover:scale-[1.02]"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="sm:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-white/[0.06] transition"
+          onClick={() => setMobileOpen((o) => !o)}
+          aria-label="Toggle menu"
+        >
+          <span className={`block w-5 h-0.5 bg-slate-300 transition-transform duration-200 origin-center ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
+          <span className={`block w-5 h-0.5 bg-slate-300 transition-opacity duration-200 ${mobileOpen ? "opacity-0" : ""}`} />
+          <span className={`block w-5 h-0.5 bg-slate-300 transition-transform duration-200 origin-center ${mobileOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="sm:hidden border-t border-slate-800 bg-slate-950/80 backdrop-blur-lg px-4 py-4 space-y-3">
+          {NAV_LINKS.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setMobileOpen(false)}
+              className={`block text-sm font-medium py-1.5 ${
+                pathname === href ? "text-emerald-400" : "text-slate-300"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+          {session ? (
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="w-full text-sm py-2 rounded-lg bg-slate-800 text-slate-200 text-left px-3"
+            >
+              Sign out ({session.user?.email})
+            </button>
+          ) : (
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="block text-sm py-2 px-3 rounded-lg border border-slate-700 text-slate-300 text-center font-medium"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setMobileOpen(false)}
+                className="block text-sm py-2 rounded-lg bg-emerald-500 text-slate-950 font-semibold text-center"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+    </nav>
+  );
+}

@@ -5,13 +5,46 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const STATS = [
-  { value: "2.5 Flash", label: "Gemini Model" },
-  { value: "< 5s", label: "Analysis Time" },
-  { value: "100%", label: "Free Forever" },
+const FEATURES = [
+  {
+    icon: (
+      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+      </svg>
+    ),
+    title: "AI Sport Detection",
+    desc: "Gemini 2.5 Flash instantly identifies the sport, scene and context.",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+      </svg>
+    ),
+    title: "Private Upload History",
+    desc: "Every analyzed image is saved in a personal, secure history.",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+      </svg>
+    ),
+    title: "No Password Required",
+    desc: "Secured by your Google account. One click and you're in.",
+  },
+  {
+    icon: (
+      <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75" />
+      </svg>
+    ),
+    title: "100% Free",
+    desc: "No credit card, no trial. Upload and analyze for free.",
+  },
 ];
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const { status } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -20,7 +53,7 @@ export default function LoginPage() {
     if (status === "authenticated") router.replace("/dashboard/history");
   }, [status, router]);
 
-  async function handleSignIn() {
+  async function handleSignUp() {
     setLoading(true);
     await signIn("google", { callbackUrl: "/dashboard/history" });
   }
@@ -43,49 +76,39 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-5xl grid grid-cols-1 md:grid-cols-[1fr_420px] gap-16 items-center">
 
-        {/* Left — welcome back panel */}
+        {/* Left — feature / brand panel */}
         <div className="hidden md:flex flex-col space-y-8">
           {/* Logo */}
-       
+        
 
           {/* Heading block */}
           <div>
             <h2 className="text-4xl font-bold tracking-tighter leading-tight mb-3">
-              Welcome back.<br />
-              <span className="text-slate-400">Ready to analyze?</span>
+              Your AI sports<br />
+              <span className="text-slate-400">analyst, for free.</span>
             </h2>
             <p className="text-slate-400 text-base leading-relaxed max-w-sm">
-              Sign in to access your personal AI sports dashboard and pick up right where you left off.
+              Upload any image. Our AI identifies the sport, analyzes the scene, and saves your history — all in seconds.
             </p>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-3">
-            {STATS.map((s) => (
-              <div key={s.label} className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-colors">
-                <p className="text-emerald-400 font-bold text-xl tracking-tight">{s.value}</p>
-                <p className="text-slate-500 text-xs mt-1">{s.label}</p>
+          {/* Feature list */}
+          <div className="space-y-4">
+            {FEATURES.map((f) => (
+              <div key={f.title} className="flex items-start gap-4">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {f.icon}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm text-white">{f.title}</p>
+                  <p className="text-slate-500 text-sm mt-0.5 leading-relaxed">{f.desc}</p>
+                </div>
               </div>
             ))}
           </div>
-
-          {/* Testimonial */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05]">
-            <div className="flex gap-0.5 mb-3">
-              {[...Array(5)].map((_, i) => (
-                <svg key={i} className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-              ))}
-            </div>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              &ldquo;Incredible accuracy — it identified the exact sport and even the player positions instantly.&rdquo;
-            </p>
-            <p className="text-slate-600 text-xs mt-3">&mdash; SportVision User</p>
-          </div>
         </div>
 
-        {/* Right — sign-in card */}
+        {/* Right — sign-up card */}
         <div className="w-full">
           {/* Mobile logo */}
           <div className="flex md:hidden items-center justify-center gap-2 mb-8">
@@ -103,18 +126,28 @@ export default function LoginPage() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold tracking-tighter mb-1.5">Sign in to your account</h1>
-              <p className="text-slate-500 text-sm">Sign in to continue to your dashboard.</p>
+              <h1 className="text-2xl font-bold tracking-tighter mb-1.5">Create your account</h1>
+              <p className="text-slate-500 text-sm">Free forever. No credit card needed.</p>
+            </div>
+
+            {/* Mobile feature bullets */}
+            <div className="md:hidden mb-6 space-y-3 p-4 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+              {FEATURES.map((f) => (
+                <div key={f.title} className="flex items-center gap-3 text-sm">
+                  <span className="text-emerald-400 flex-shrink-0">{f.icon}</span>
+                  <span className="text-slate-300 font-medium">{f.title}</span>
+                </div>
+              ))}
             </div>
 
             <div className="flex items-center gap-3 mb-5">
               <div className="flex-1 h-px bg-white/[0.06]" />
-              <span className="text-[11px] text-slate-600 uppercase tracking-widest">continue with</span>
+              <span className="text-[11px] text-slate-600 uppercase tracking-widest">sign up with</span>
               <div className="flex-1 h-px bg-white/[0.06]" />
             </div>
 
             <button
-              onClick={handleSignIn}
+              onClick={handleSignUp}
               disabled={loading}
               className="w-full flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-900 font-semibold text-sm transition-all duration-200 shadow-lg shadow-black/30 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.015] active:scale-[0.985]"
             >
@@ -128,11 +161,11 @@ export default function LoginPage() {
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
               )}
-              {loading ? "Signing in…" : "Sign in with Google"}
+              {loading ? "Creating account…" : "Sign up with Google"}
             </button>
 
             <p className="mt-5 text-center text-xs text-slate-600">
-              By signing in you agree to our{" "}
+              By signing up you agree to our{" "}
               <span className="text-slate-500 underline underline-offset-2 cursor-pointer hover:text-slate-300 transition-colors">Terms</span>
               {" "}&amp;{" "}
               <span className="text-slate-500 underline underline-offset-2 cursor-pointer hover:text-slate-300 transition-colors">Privacy Policy</span>.
@@ -140,9 +173,9 @@ export default function LoginPage() {
 
             <div className="mt-6 pt-5 border-t border-white/[0.05] text-center">
               <p className="text-sm text-slate-500">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
-                  Create one →
+                Already have an account?{" "}
+                <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+                  Sign in →
                 </Link>
               </p>
             </div>

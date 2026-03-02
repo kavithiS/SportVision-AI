@@ -121,9 +121,10 @@ A web application that allows users to upload images of sports activities, ident
 }
 ```
 
-**Configuration Required:**
-- `.env.local`: `GEMINI_API_KEY=your_api_key_here`
+ **Configuration Required:**
+ - `.env.local`: `GEMINI_API_KEY=your_api_key_here`
 
+ **Note:** A placeholder API key was added to `.env` and later replaced with a working key for local testing. Ensure you keep the real key secret in production.
 ---
 
 ### 5. Frontend UI & Styling ✓
@@ -169,32 +170,24 @@ Example: 1772210298466-cricket_match.jpg
 ## 🚀 In Progress / Next Tasks
 
 ### 5. Database Integration (MongoDB + Prisma)
-**Status:** ⏳ Not Started
+**Status:** 🔧 In Progress
 **Priority:** HIGH
 
-**What needs to be done:**
-- [ ] Install Prisma (`npm install @prisma/client @next/prisma`)
-- [ ] Create Prisma schema (`schema.prisma`)
-- [ ] Define Upload model with:
-  - id (unique)
-  - userId (from NextAuth session)
-  - fileName
-  - filePath
-  - fileSize
-  - fileType
-  - uploadedAt (timestamp)
-  - sport (AI detected)
-  - description (AI generated)
-  - confidence
-  - details
-- [ ] Define User model (optional, can use NextAuth provider)
-- [ ] Set up MongoDB connection string in `.env.local`
-- [ ] Run `prisma migrate dev`
-- [ ] Create database utility functions
+**Progress:**
+- [x] Install Prisma and dependencies
+- [x] Create `prisma/schema.prisma` with `User` and `Upload` models
+- [x] Set `DATABASE_URL` in `.env` (connected to MongoDB Atlas)
+- [x] Run `npx prisma db push` (database in sync)
+- [x] Run `npx prisma generate` (Prisma Client generated)
+- [x] Add `src/lib/prisma.ts` client instantiation
+- [ ] Create database utility functions (pending)
+
+**What remains:**
+- [ ] Implement helper functions to persist uploads to the database (`createUpload`, `getUserUploads`, etc.)
 
 **Expected Files:**
-- `prisma/schema.prisma` - Data models
-- `src/lib/prisma.ts` - Prisma client instance
+- `prisma/schema.prisma` - Data models (present)
+- `src/lib/prisma.ts` - Prisma client instance (present)
 
 ---
 
