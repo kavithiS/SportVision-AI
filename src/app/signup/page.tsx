@@ -50,12 +50,12 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") router.replace("/dashboard/history");
+    if (status === "authenticated") router.replace("/");
   }, [status, router]);
 
   async function handleSignUp() {
     setLoading(true);
-    await signIn("google", { callbackUrl: "/dashboard/history" });
+    await signIn("google", { callbackUrl: "/" });
   }
 
   if (status === "loading" || status === "authenticated") {
