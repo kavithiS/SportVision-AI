@@ -32,8 +32,8 @@ function AuthDropdown({ session }: { session: any }) {
     return 'U';
   }
 
-  const displayName = session.user?.name || session.user?.email?.split('@')[0];
-  const masked = maskEmail(session.user?.email);
+  const displayName = '';
+  const masked = '';
 
   return (
     <div className="relative">
@@ -42,7 +42,6 @@ function AuthDropdown({ session }: { session: any }) {
         className="flex items-center gap-3 pl-2 pr-2 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all"
         aria-haspopup="menu"
         aria-expanded={open}
-        title={session.user?.email}
       >
         {session.user?.image ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -58,10 +57,7 @@ function AuthDropdown({ session }: { session: any }) {
           </div>
         )}
 
-        <div className="hidden md:flex flex-col items-start leading-tight">
-          <span className="text-sm text-white font-medium truncate max-w-[120px]">{displayName}</span>
-          <span className="text-xs text-slate-400">{masked}</span>
-        </div>
+        {/* intentionally hide name and email to preserve privacy */}
 
         <svg className={`w-4 h-4 text-slate-300 ml-1 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" stroke="currentColor">
           <path d="M6 8l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -70,14 +66,8 @@ function AuthDropdown({ session }: { session: any }) {
 
       {open && (
         <div className="absolute right-0 mt-2 w-56 rounded-xl bg-slate-950 border border-white/[0.04] shadow-lg py-2 z-40">
-          <div className="px-4 py-3 border-b border-white/[0.03]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 font-semibold">{initials(session.user?.name, session.user?.email)}</div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm text-white truncate">{displayName}</div>
-                <div className="text-xs text-slate-400 truncate">{masked}</div>
-              </div>
-            </div>
+          <div className="px-4 py-3 border-b border-white/[0.03] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-300 font-semibold">{initials(session.user?.name, session.user?.email)}</div>
           </div>
           <Link href="/dashboard/history" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">Dashboard</Link>
           <Link href="/upload" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">New Upload</Link>
@@ -198,7 +188,7 @@ export default function Navbar() {
               onClick={() => signOut({ callbackUrl: "/" })}
               className="w-full text-sm py-2 rounded-lg bg-slate-800 text-slate-200 text-left px-3"
             >
-              Sign out ({session.user?.email})
+              Sign out
             </button>
           ) : (
             <div className="flex flex-col gap-2">
