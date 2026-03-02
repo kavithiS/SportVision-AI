@@ -11,6 +11,55 @@ const NAV_LINKS = [
   { href: "/dashboard/history", label: "History" },
 ];
 
+function AuthDropdown({ session }: { session: any }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen((s) => !s)}
+        className="flex items-center gap-2 pl-2 pr-2 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        {session.user?.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={session.user.image}
+            alt={session.user.name ?? 'avatar'}
+            className="w-8 h-8 rounded-full object-cover"
+            onError={(e: any) => { e.currentTarget.style.display = 'none'; }}
+          />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-sm font-bold">
+            {session.user?.email?.[0]?.toUpperCase() ?? 'U'}
+          </div>
+        )}
+        <div className="hidden lg:flex flex-col items-start">
+          <span className="text-sm text-white font-medium leading-tight">{session.user?.name ?? session.user?.email}</span>
+          <span className="text-xs text-slate-400 truncate">{session.user?.email}</span>
+        </div>
+        <svg className={`w-4 h-4 text-slate-300 ml-1 transition-transform ${open ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="none" stroke="currentColor">
+          <path d="M6 8l4 4 4-4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 mt-2 w-48 rounded-xl bg-slate-950 border border-white/[0.04] shadow-lg py-2 z-40">
+          <Link href="/dashboard/history" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">Dashboard</Link>
+          <Link href="/upload" className="block px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]">New Upload</Link>
+          <button
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="w-full text-left px-4 py-2 text-sm text-slate-200 hover:bg-white/[0.03]"
+          >
+            Sign out
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
@@ -60,35 +109,12 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Auth section */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Auth section (redesigned): avatar + dropdown on desktop, compact on mobile */}
+        <div className="hidden sm:flex items-center gap-3 relative">
           {status === "loading" ? (
             <div className="w-8 h-8 rounded-full bg-slate-800/80 animate-pulse" />
           ) : session ? (
-            <div className="flex items-center gap-2 pl-1 pr-1 py-1 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.10] transition-all">
-              {session.user?.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={session.user.image}
-                  alt={session.user.name ?? "avatar"}
-                  title={session.user.email ?? ""}
-                  className="w-7 h-7 rounded-lg flex-shrink-0"
-                />
-              ) : (
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xs font-bold flex-shrink-0">
-                  {session.user?.email?.[0]?.toUpperCase() ?? "U"}
-                </div>
-              )}
-              <span className="text-xs text-slate-400 max-w-[130px] truncate pr-1 hidden lg:block">
-                {session.user?.email}
-              </span>
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-xs px-3 py-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.10] text-slate-300 hover:text-white border border-white/[0.06] hover:border-white/[0.12] transition-all font-medium"
-              >
-                Sign out
-              </button>
-            </div>
+            <AuthDropdown session={session} />
           ) : (
             <div className="flex items-center gap-2">
               <Link
